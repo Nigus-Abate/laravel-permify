@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "nigus-abate\\Permify\\": "src/",
+            "Permify\\": "src/",
             "Illuminate\\Foundation\\Auth\\": "auth-backend/"
         }
     },
@@ -36,7 +36,7 @@
         },
         "laravel": {
             "providers": [
-                "nigus-abate\\Permify\\PermifyServiceProvider"
+                "Permify\\PermifyServiceProvider"
             ]
         }
     },
