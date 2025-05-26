@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Permify;
+namespace Permify;
 
 use Illuminate\Console\Command;
 use InvalidArgumentException;

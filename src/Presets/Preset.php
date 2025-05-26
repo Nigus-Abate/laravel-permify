@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Permify\Presets;
+namespace Permify\Presets;
 
 use Illuminate\Filesystem\Filesystem;
 
