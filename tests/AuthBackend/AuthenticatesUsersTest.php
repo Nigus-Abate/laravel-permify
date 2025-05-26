@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Permify\Tests\AuthBackend;
+namespace Permify\Tests\AuthBackend;
 
 use Illuminate\Auth\Events\Attempting;
 use Illuminate\Auth\Events\Logout;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Permify\Tests\AuthBackend;
+namespace Permify\Tests\AuthBackend;
 
 use Illuminate\Foundation\Auth\ThrottlesLogins as ThrottlesLoginsTrait;
 use Orchestra\Testbench\TestCase;

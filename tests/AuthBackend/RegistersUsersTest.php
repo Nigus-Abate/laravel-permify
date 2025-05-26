@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Permify\Tests\AuthBackend;
+namespace Permify\Tests\AuthBackend;
 
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Foundation\Auth\User;
