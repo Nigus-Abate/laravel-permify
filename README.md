@@ -1,6 +1,6 @@
 # Laravel-Permify
 
-<a href="https://packagist.org/packages/nigus-abate/laravel-permify"><img src="https://img.shields.io/packagist/dt/nigus-abate/laravel-permify" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/nigus-abate/laravel-permify/stats"><img src="https://img.shields.io/packagist/dt/nigus-abate/laravel-permify" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/nigus-abate/laravel-permify"><img src="https://img.shields.io/packagist/v/nigus-abate/laravel-permify" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/nigus-abate/laravel-permify"><img src="https://img.shields.io/packagist/l/nigus-abate/laravel-permify" alt="License"></a>
 
