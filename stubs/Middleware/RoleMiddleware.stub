@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Closure;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
+use App\Models\Role;
+use App\Models\Permission;
+
+class RoleMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        // Check if the necessary tables exist
+        if (!Schema::hasTable('roles') || !Schema::hasTable('permissions')) {
+            return $next($request); // Skip the middleware if tables don't exist
+        }
+
+        $user = auth()->user();
+
+        if (!$user) {
+            return $next($request);
+        }
+
+        // // by pass super admin
+        // if (!auth()->user()->is_super) {
+        //     return $next($request);
+        // }
+
+        // Fetch roles and permissions for the user's
+        $roles = Role::with('permissions')->get();
+        $permissionsArray = [];
+
+        foreach ($roles as $role) {
+            foreach ($role->permissions as $permission) {
+                $permissionsArray[$permission->name][] = $role->id;
+            }
+        }
+        // Define permissions for Gate
+        foreach ($permissionsArray as $name => $roles) {
+            Gate::define($name, function ($user) use ($roles) {
+                return count(array_intersect($user->roles->pluck('id')->toArray(), $roles)) > 0;
+            });
+        }
+
+        return $next($request);
+    }
+}
+

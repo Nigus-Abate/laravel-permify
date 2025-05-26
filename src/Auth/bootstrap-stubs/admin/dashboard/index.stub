@@ -1,0 +1,154 @@
+@extends('layouts.admin')
+
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Dashboard</h1>
+        <button id="theme-toggle" class="btn btn-outline-secondary">
+            <i class="fas fa-moon"></i> Toggle Theme
+        </button>
+    </div>
+
+    <div class="row mb-4">
+        <!-- Total Users Card -->
+        <div class="col-md-4 mb-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <h2 class="card-text display-6">{{ $totalUsers }}</h2>
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-primary">View Users</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Roles Card -->
+        <div class="col-md-4 mb-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Roles</h5>
+                    <h2 class="card-text display-6">{{ $totalRoles }}</h2>
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-sm btn-primary">View Roles</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Permissions Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Permissions</h5>
+                    <h2 class="card-text display-6">{{ $totalPermissions }}</h2>
+                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-sm btn-primary">View Permissions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Recent Users -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Registered Users</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recentUsers as $user)
+                                <tr>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->created_at->format('M d, Y') }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Distribution -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Role Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="roleChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Role Distribution Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('roleChart').getContext('2d');
+        const roleChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($roleDistribution->keys()),
+                datasets: [{
+                    label: 'Users per Role',
+                    data: @json($roleDistribution->values()),
+                    backgroundColor: 'rgba(13, 110, 253, 0.7)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+            toggleBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+            toggleBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        }
+
+        // Toggle theme on button click
+        toggleBtn.addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            }
+        });
+    });
+</script>
+@endsection

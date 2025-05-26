@@ -1,0 +1,45 @@
+{
+    "name": "nigus-abate/laravel-permify",
+    "description": "Laravel Permify is a powerful, easy-to-use Laravel package for managing roles and permissions with full CRUD UI and middleware support.",
+    "keywords": ["laravel", "ui", "permify", "role", "permission", "starter"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nigus Abate",
+            "email": "abatenigus0@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "illuminate/console": "^9.21|^10.0|^11.0|^12.0",
+        "illuminate/filesystem": "^9.21|^10.0|^11.0|^12.0",
+        "illuminate/support": "^9.21|^10.0|^11.0|^12.0",
+        "illuminate/validation": "^9.21|^10.0|^11.0|^12.0",
+        "symfony/console": "^6.0|^7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.35|^8.15|^9.0|^10.0",
+        "phpunit/phpunit": "^9.3|^10.4|^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laravel\\Permify\\": "src/",
+            "Illuminate\\Foundation\\Auth\\": "auth-backend/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "4.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Laravel\\Permify\\PermifyServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

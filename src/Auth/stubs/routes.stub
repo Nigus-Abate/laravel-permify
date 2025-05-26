@@ -1,0 +1,12 @@
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'verified']], function () {
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::post('roles/{id}/assign-permissions', [RoleController::class, 'assignPermissions'])->name('roles.assignPermissions');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+});
