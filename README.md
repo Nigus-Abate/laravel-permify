@@ -1,10 +1,15 @@
-# Laravel Permify
+# Laravel-Permify
 
 <a href="https://packagist.org/packages/nigus-abate/laravel-permify"><img src="https://img.shields.io/packagist/dt/nigus-abate/laravel-permify" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/nigus-abate/laravel-permify"><img src="https://img.shields.io/packagist/v/nigus-abate/laravel-permify" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/nigus-abate/laravel-permify"><img src="https://img.shields.io/packagist/l/nigus-abate/laravel-permify" alt="License"></a>
 
+
+**Laravel Permify** is a powerful, easy-to-use Laravel package for managing roles and permissions with full CRUD UI and middleware support.
+
 ## Introduction
+
+This package is a modification of Laravel UI 4.x package. It is created to fill the gap of a simple tailwind authentication scaffolding and Role and Permissions by copying the methods used in Laravel UI 4.x package
 
 While Laravel does not dictate which JavaScript or CSS pre-processors you use, it does provide a basic starting point using [Bootstrap](https://getbootstrap.com/), [React](https://reactjs.org/), and / or [Vue](https://vuejs.org/) that will be helpful for many applications. By default, Laravel uses [NPM](https://www.npmjs.org/) to install both of these frontend packages.
 
@@ -18,21 +23,22 @@ Only the latest major version of Laravel UI receives bug fixes. The table below 
 
 | Version | Laravel Version |
 |---- |----|
-| [1.x](https://github.com/nigus-abate/laravel-permify/tree/1.x) | 5.8, 6.x |
-| [2.x](https://github.com/nigus-abate/laravel-permify/tree/2.x) | 7.x |
-| [3.x](https://github.com/nigus-abate/laravel-permify/tree/3.x) | 8.x, 9.x |
-| [4.x](https://github.com/nigus-abate/laravel-permify/tree/4.x) | 9.x, 10.x, 11.x |
+| [1.x](https://github.com/nigus-abate/laravel-permify/tree/main) | 9.x, 10.x, 11.x, 12.X |
 
-### Installation
+## Features
+- Role and Permission management with CRUD operations
+- Middleware to protect routes via permissions (`RoleMiddleware` middleware)
+- Blade directives for easy permission checks (`@can`)
+- Traits for User models to assign/check roles and permissions
+- Publishable migrations, views, and config
+- Fully customizable admin UI with Bootstrap CSS, Vue and React
 
-The Bootstrap and Vue scaffolding provided by Laravel is located in the `nigus-abate/laravel-permify` Composer package, which may be installed using Composer:
+## Installation
+
+Require the package via Composer:
 
 ```bash
 composer require nigus-abate/laravel-permify
-```
-
-Once the `nigus-abate/laravel-permify` package has been installed, you may install the frontend scaffolding using the `permify` Artisan command:
-
 ```bash
 // Generate basic scaffolding...
 php artisan permify bootstrap
@@ -44,6 +50,21 @@ php artisan permify bootstrap --auth
 php artisan permify vue --auth
 php artisan permify react --auth
 ```
+### Usage
+  Add the HasAdvancedRoles trait to your User model:
+  ```bash
+  use Permify\Traits\HasAdvancedRoles;
+	class User extends Authenticatable
+	{
+	    use HasAdvancedRoles::class,
+	    // ...
+	}
+
+	Add the RoleMiddleware to your app/bootstrap/app:
+
+	$middleware->group('web',[
+		\App\Http\Middleware\RoleMiddleware::class,
+	]);
 
 #### CSS
 
@@ -147,7 +168,7 @@ php artisan ui nextjs
 
 ## Contributing
 
-Thank you for considering contributing to UI! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Thank you for considering contributing to UI!.
 
 ## Code of Conduct
 

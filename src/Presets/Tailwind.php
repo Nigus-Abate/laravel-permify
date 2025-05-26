@@ -1,10 +1,10 @@
 <?php
 
-namespace Permify\Presets;
+namespace Algoetech\LaravelUi\Presets;
 
 use Illuminate\Filesystem\Filesystem;
 
-class Bootstrap extends Preset
+class Tailwind extends Preset
 {
     /**
      * Install the preset.
@@ -20,22 +20,6 @@ class Bootstrap extends Preset
         static::removeNodeModules();
     }
 
-    public static function essentialInstall()
-    {
-        static::updatePackages();
-        static::updateSass();
-        static::updateBootstrapping();
-        static::removeNodeModules();
-    }
-
-    public static function essentialInstall()
-    {
-        static::updatePackages();
-        static::updateSass();
-        static::updateBootstrapping();
-        static::removeNodeModules();
-    }
-
     /**
      * Update the given package array.
      *
@@ -45,9 +29,13 @@ class Bootstrap extends Preset
     protected static function updatePackageArray(array $packages)
     {
         return [
-            'bootstrap' => '^5.2.3',
-            '@popperjs/core' => '^2.11.6',
-            'sass' => '^1.56.1',
+            "@tailwindcss/aspect-ratio" => "^0.4.2",
+            "@tailwindcss/forms" => "^0.5.7",
+            "@tailwindcss/typography" => "^0.5.10",
+            "vite-plugin-windicss" => "^1.9.3",
+            "autoprefixer" => "^10.4.16",
+            "postcss" => "^8.4.31",
+            "tailwindcss" => "^3.3.5",
         ] + $packages;
     }
 
@@ -58,7 +46,19 @@ class Bootstrap extends Preset
      */
     protected static function updateViteConfiguration()
     {
-        copy(__DIR__.'/bootstrap-stubs/vite.config.js', base_path('vite.config.js'));
+        copy(__DIR__.'/tailwind-stubs/vite.config.js', base_path('vite.config.js'));
+
+    }
+
+
+    /**
+     * Add the postCss configuration file.
+     *
+     * @return void
+     */
+    protected static function addPostCssConfiguration()
+    {
+        copy(__DIR__.'/tailwind-stubs/postcss.config.js', base_path('postcss.config.js'));
     }
 
     /**
@@ -70,8 +70,7 @@ class Bootstrap extends Preset
     {
         (new Filesystem)->ensureDirectoryExists(resource_path('sass'));
 
-        copy(__DIR__.'/bootstrap-stubs/_variables.scss', resource_path('sass/_variables.scss'));
-        copy(__DIR__.'/bootstrap-stubs/app.scss', resource_path('sass/app.scss'));
+        copy(__DIR__.'/tailwind-stubs/app.scss', resource_path('sass/app.scss'));
     }
 
     /**
@@ -81,6 +80,7 @@ class Bootstrap extends Preset
      */
     protected static function updateBootstrapping()
     {
-        copy(__DIR__.'/bootstrap-stubs/bootstrap.js', resource_path('js/bootstrap.js'));
+        copy(__DIR__.'/tailwind-stubs/app.js', resource_path('js/app.js'));
     }
+
 }

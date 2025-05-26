@@ -15,6 +15,6 @@ trait RedirectsUsers
             return $this->redirectTo();
         }
 
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/admin/dashbaord';
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
     }
 }
