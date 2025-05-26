@@ -1,6 +1,6 @@
 <?php
 
-namespace Algoetech\LaravelUi\Presets;
+namespace Permify\Presets;
 
 use Illuminate\Filesystem\Filesystem;
 
