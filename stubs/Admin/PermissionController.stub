@@ -95,12 +95,4 @@ class PermissionController extends Controller
             ->with('success', 'Permission deleted successfully.');
     }
 
-    public function destroy(Permission $permission)
-    {
-        abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        // Delete the permission
-        $permission->delete();
-
-        return redirect()->route('admin.users.index')->with('success', 'Permission deleted successfully.');
-    }
 }

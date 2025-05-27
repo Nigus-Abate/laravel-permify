@@ -1,166 +1,361 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true', sidebarOpen: false }" 
-      :class="{ 'dark': darkMode }">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Panel - @yield('title')</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    transitionProperty: {
-                        'width': 'width'
-                    }
-                }
-            }
-        }
-    </script>
-
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     @stack('styles')
+    
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --sidebar-collapsed-width: 80px;
+            --topbar-height: 60px;
+            --primary-color: #6366f1;
+            --sidebar-bg: #1e293b;
+            --sidebar-active-bg: rgba(99, 102, 241, 0.2);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: var(--sidebar-bg);
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+        
+        .sidebar-collapsed .sidebar-brand,
+        .sidebar-collapsed .nav-link-text {
+            display: none;
+        }
+        
+        .sidebar-collapsed .nav-link {
+            justify-content: center;
+        }
+        
+        .sidebar-brand {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1.5rem;
+            margin: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active {
+            color: white;
+            background-color: var(--sidebar-active-bg);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .nav-link i {
+            margin-right: 1rem;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            background-color: #f8fafc;
+        }
+        
+        .main-content-expanded {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+        
+        /* Topbar Styles */
+        .topbar {
+            height: var(--topbar-height);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+        }
+        
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #64748b;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar-mobile-show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-content-expanded {
+                margin-left: 0;
+            }
+        }
+        
+        /* Dark Mode Styles */
+        [data-bs-theme="dark"] {
+            --sidebar-bg: #0f172a;
+            --sidebar-active-bg: rgba(99, 102, 241, 0.3);
+        }
+        
+        [data-bs-theme="dark"] .main-content {
+            background-color: #0f172a;
+        }
+        
+        [data-bs-theme="dark"] .topbar {
+            background-color: #1e293b;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        [data-bs-theme="dark"] .card {
+            background-color: #1e293b;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        [data-bs-theme="dark"] .card-header {
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        
+        [data-bs-theme="dark"] table {
+            color: #e2e8f0;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-    <div class="flex min-h-screen">
-        <!-- Mobile sidebar backdrop -->
-        <div x-show="sidebarOpen" @click="sidebarOpen = false" 
-             class="fixed inset-0 z-20 bg-black/50 lg:hidden" x-transition></div>
-
-        <!-- Sidebar -->
-        <aside class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 dark:bg-gray-800 text-white transition-transform duration-300 ease-in-out transform"
-               :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }"
-               @click.away="sidebarOpen = false">
-            <div class="flex items-center justify-between p-4 border-b border-gray-700">
-                <h4 class="text-xl font-semibold">Admin Panel</h4>
-                <button @click="sidebarOpen = false" class="lg:hidden p-2 text-gray-400 hover:text-white">
-                    <i class="fas fa-times"></i>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="sidebar-brand-text">AdminPanel</span>
+        </div>
+        <ul class="nav flex-column sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard.index') }}">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="nav-link-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                    <i class="fas fa-users"></i>
+                    <span class="nav-link-text">Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/roles*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}">
+                    <i class="fas fa-user-tag"></i>
+                    <span class="nav-link-text">Roles</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/permissions*') ? 'active' : '' }}" href="{{ route('admin.permissions.index') }}">
+                    <i class="fas fa-key"></i>
+                    <span class="nav-link-text">Permissions</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Topbar -->
+        <div class="topbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="ms-auto d-flex align-items-center">
+                <button id="theme-toggle" class="btn btn-sm btn-outline-secondary me-3">
+                    <i class="fas fa-moon"></i>
+                    <span class="d-none d-md-inline">Toggle Theme</span>
                 </button>
-            </div>
-            <nav class="p-4">
-                <ul class="space-y-1">
-                    <li>
-                        <a href="{{ route('admin.dashboard.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
-                            {{ request()->is('admin/dashboard') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
-                            <i class="fas fa-tachometer-alt w-5 mr-3 text-center"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
-                            {{ request()->is('admin/users*') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
-                            <i class="fas fa-users w-5 mr-3 text-center"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.roles.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
-                            {{ request()->is('admin/roles*') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
-                            <i class="fas fa-user-tag w-5 mr-3 text-center"></i>
-                            <span>Roles</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.permissions.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
-                            {{ request()->is('admin/permissions*') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
-                            <i class="fas fa-key w-5 mr-3 text-center"></i>
-                            <span>Permissions</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <div class="flex-1 lg:ml-64">
-            <!-- Navbar -->
-            <header class="sticky top-0 z-10 bg-white dark:bg-gray-800 shadow-sm">
-                <div class="flex items-center justify-between p-4">
-                    <button @click="sidebarOpen = true" class="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    
-                    <div class="flex items-center space-x-4">
-                        <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)" 
-                                class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                            <i x-show="!darkMode" class="fas fa-moon"></i>
-                            <i x-show="darkMode" class="fas fa-sun"></i>
-                        </button>
-                        
-                        <div x-data="{ dropdownOpen: false }" class="relative">
-                            <button @click="dropdownOpen = !dropdownOpen" 
-                                    class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
-                                <i class="fas fa-user-circle"></i>
-                                <span>{{ Auth::user()->name }}</span>
-                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" 
-                                   :class="{ 'transform rotate-180': dropdownOpen }"></i>
-                            </button>
-                            
-                            <div x-show="dropdownOpen" @click.away="dropdownOpen = false" 
-                                 x-transition:enter="transition ease-out duration-100" 
-                                 x-transition:enter-start="transform opacity-0 scale-95" 
-                                 x-transition:enter-end="transform opacity-100 scale-100" 
-                                 x-transition:leave="transition ease-in duration-75" 
-                                 x-transition:leave-start="transform opacity-100 scale-100" 
-                                 x-transition:leave-end="transform opacity-0 scale-95"
-                                 class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-20 border border-gray-200 dark:border-gray-600">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <i class="fas fa-user mr-2"></i> Profile
-                                </a>
-                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
-                                <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600" 
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                    @csrf
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                               <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
                 </div>
-            </header>
-
-            <!-- Content -->
-            <main class="p-6">
-                <!-- Alerts -->
-                @if(session('success'))
-                    <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800 rounded-lg">
-                        <div class="flex items-center">
-                            <i class="fas fa-check-circle mr-2"></i>
-                            {{ session('success') }}
-                        </div>
-                    </div>
-                @endif
-
-                @if($errors->any())
-                    <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800 rounded-lg">
-                        <div class="flex items-center mb-2">
-                            <i class="fas fa-exclamation-circle mr-2"></i>
-                            <span class="font-medium">There were some errors with your submission:</span>
-                        </div>
-                        <ul class="list-disc pl-5 space-y-1">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <!-- Page Content -->
-                @yield('content')
-            </main>
+            </div>
+        </div>
+        
+        <!-- Page Content -->
+        <div class="container-fluid p-4">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
+            @if($errors->any()))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
+            @yield('content')
         </div>
     </div>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            // Sidebar toggle functionality
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar-collapsed');
+                mainContent.classList.toggle('main-content-expanded');
+                
+                // Save sidebar state
+                if (sidebar.classList.contains('sidebar-collapsed')) {
+                    localStorage.setItem('sidebar-collapsed', 'true');
+                } else {
+                    localStorage.removeItem('sidebar-collapsed');
+                }
+            });
+            
+            // Mobile sidebar toggle
+            function handleMobileSidebar() {
+                if (window.innerWidth < 992) {
+                    sidebar.classList.remove('sidebar-collapsed');
+                    mainContent.classList.remove('main-content-expanded');
+                }
+            }
+            
+            // Check for saved sidebar state
+            if (localStorage.getItem('sidebar-collapsed') === 'true' && window.innerWidth >= 992) {
+                sidebar.classList.add('sidebar-collapsed');
+                mainContent.classList.add('main-content-expanded');
+            }
+            
+            // Theme toggle functionality
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i><span class="d-none d-md-inline"> Light Mode</span>';
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i><span class="d-none d-md-inline"> Dark Mode</span>';
+            }
 
+            themeToggle.addEventListener('click', () => {
+                if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i><span class="d-none d-md-inline"> Dark Mode</span>';
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i><span class="d-none d-md-inline"> Light Mode</span>';
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', handleMobileSidebar);
+        });
+    </script>
+    
     @stack('scripts')
 </body>
 </html>
