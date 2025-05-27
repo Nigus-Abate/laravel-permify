@@ -53,32 +53,62 @@ php artisan permify:auth vue
 php artisan permify:auth react
 ```
 ### Usage
-  Add the HasAdvancedRoles trait to your User model:
-  ```bash
-  use Permify\Traits\HasAdvancedRoles;
-	class User extends Authenticatable
+Add the HasAdvancedRoles trait to your User model:
+```bash
+use Permify\Traits\HasAdvancedRoles;
+class User extends Authenticatable
+{
+	use HasAdvancedRoles;
+	// ...
+}
+
+Add the RoleMiddleware to your app/bootstrap/app:
+
+$middleware->group('web',[
+	\App\Http\Middleware\RoleMiddleware::class,
+]);
+```
+### Example usage in the controller
+```bash
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Permission;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
+class PermissionController extends Controller
+{
+	public function index()
 	{
-	    use HasAdvancedRoles::class,
-	    // ...
+		abort_if(Gate::denies('permissions_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		$permissions = Permission::all();
+		return view('admin.permissions.index', compact('permissions'));
 	}
-
-	Add the RoleMiddleware to your app/bootstrap/app:
-
-	$middleware->group('web',[
-		\App\Http\Middleware\RoleMiddleware::class,
-	]);
+}
+```
+### Example usage in the blade
+```bash
+@can('permission_edit')
+<a href="{{ route('admin.permissions.edit', $permission->id) }}" class="btn btn-sm btn-info">
+<i class="fas fa-edit"></i>
+</a>
+@endcan
+```
 
 ### If you install Tailwind replace the resources/css/app.css with the below
 
- ```bash
+```bash
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Optional custom CSS */
 :root {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+	--font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+	'Segoe UI Symbol', 'Noto Color Emoji';
 }
 ```
 
@@ -143,7 +173,7 @@ To use the component in your application, you may drop it into one of your HTML 
 @extends('layouts.app')
 
 @section('content')
-    <example-component></example-component>
+<example-component></example-component>
 @endsection
 ```
 
