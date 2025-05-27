@@ -16,122 +16,113 @@
     </div>
 </div>
 
-<div class="row mb-4">
-    <!-- Total Users Card -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-start border-primary border-4">
-            <div class="card-body">
+    <div class="row mb-4">
+        <!-- Total Users Card -->
+        <div class="col-md-4 mb-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
                         <h5 class="card-title text-muted mb-2">Total Users</h5>
                         <h2 class="mb-0">{{ $totalUsers }}</h2>
                     </div>
                     <div class="avatar-sm rounded-circle bg-primary bg-opacity-10 p-3">
-                        <i class="fas fa-users text-primary fs-4"></i>
+                        <i class="fas fa-users text-primary fs-3"></i>
                     </div>
                 </div>
                 <div class="mt-3">
                     <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-primary">View Users</a>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Total Roles Card -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-start border-success border-4">
-            <div class="card-body">
+        <!-- Total Roles Card -->
+        <div class="col-md-4 mb-4 mb-md-0">
+            <div class="card">
+                <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
                         <h5 class="card-title text-muted mb-2">Total Roles</h5>
                         <h2 class="mb-0">{{ $totalRoles }}</h2>
                     </div>
                     <div class="avatar-sm rounded-circle bg-success bg-opacity-10 p-3">
-                        <i class="fas fa-user-tag text-success fs-4"></i>
+                        <i class="fas fa-user-tag text-success fs-3"></i>
                     </div>
                 </div>
                 <div class="mt-3">
                     <a href="{{ route('admin.roles.index') }}" class="btn btn-sm btn-outline-success">View Roles</a>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Total Permissions Card -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-start border-info border-4">
-            <div class="card-body">
+        <!-- Total Permissions Card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div>
                         <h5 class="card-title text-muted mb-2">Total Permissions</h5>
                         <h2 class="mb-0">{{ $totalPermissions }}</h2>
                     </div>
                     <div class="avatar-sm rounded-circle bg-info bg-opacity-10 p-3">
-                        <i class="fas fa-key text-info fs-4"></i>
+                        <i class="fas fa-key text-info fs-3"></i>
                     </div>
                 </div>
                 <div class="mt-3">
                     <a href="{{ route('admin.permissions.index') }}" class="btn btn-sm btn-outline-info">View Permissions</a>
                 </div>
             </div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <!-- Recent Users -->
-    <div class="col-lg-6 mb-4">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="row">
+        <!-- Recent Users -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+               <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Recent Registered Users</h5>
                 <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-secondary">View All</a>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Registered</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($recentUsers as $user)
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-sm me-2">
-                                            <div class="avatar-title rounded-circle bg-light text-primary">
-                                                {{ substr($user->name, 0, 1) }}
-                                            </div>
-                                        </div>
-                                        <div>{{ $user->name }}</div>
-                                    </div>
-                                </td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->created_at->format('M d, Y') }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recentUsers as $user)
+                                <tr>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->created_at->format('M d, Y') }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Distribution -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Role Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="roleChart" height="250"></canvas>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Role Distribution -->
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Role Distribution</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="roleChart" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -19,7 +19,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-light-subtle shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -55,6 +55,9 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <button id="theme-toggle" class="btn btn-outline-secondary">
+                            <i class="fas fa-moon"></i> Toggle Theme
+                        </button>
                         <!-- Authentication Links -->
                         @guest
                         @if (Route::has('login'))
@@ -116,5 +119,34 @@
         </div>
     </main>
 </div>
+<script>
+    // Role Distribution Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+            toggleBtn.innerHTML = '<i class="fas fa-sun"></i> ';
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+            toggleBtn.innerHTML = '<i class="fas fa-moon"></i> ';
+        }
+
+        // Toggle theme on button click
+        toggleBtn.addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '<i class="fas fa-moon"></i> ';
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '<i class="fas fa-sun"></i> ';
+            }
+        });
+    });
+</script>
 </body>
 </html>
