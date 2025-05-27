@@ -3,6 +3,12 @@
 namespace {{namespace}}Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Request;
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\User;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
 {
@@ -23,6 +29,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        //abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
+        $totalUsers = User::count();
+        $totalRoles = Role::count();
+        $totalPermissions = Permission::count();
+        $recentUsers = User::latest()->take(5)->get();
+
+        // Role distribution: role name => user count
+        $roleDistribution = Role::withCount('users')->get()->pluck('users_count', 'name');
+
+        return view('home', compact(
+            'totalUsers',
+            'totalRoles',
+            'totalPermissions',
+            'recentUsers',
+            'roleDistribution'
+        ));
     }
 }
