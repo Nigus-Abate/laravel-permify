@@ -1,0 +1,56 @@
+@extends('layouts.admin')
+
+@section('title', 'Permission Management')
+
+@section('content')
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <h5 class="text-lg font-semibold">Permissions</h5>
+        <a href="{{ route('admin.permissions.create') }}" 
+           class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded transition">
+            <i class="fas fa-plus mr-2"></i> Add Permission
+        </a>
+    </div>
+    <div class="overflow-x-auto p-6">
+        <table class="min-w-full text-left text-sm text-gray-700 dark:text-gray-300">
+            <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-700">
+                    <th class="py-3 px-4 font-semibold">ID</th>
+                    <th class="py-3 px-4 font-semibold">Name</th>
+                    <th class="py-3 px-4 font-semibold">Description</th>
+                    <th class="py-3 px-4 font-semibold">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($permissions as $permission)
+                <tr class="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td class="py-3 px-4">{{ $permission->id }}</td>
+                    <td class="py-3 px-4">{{ $permission->name }}</td>
+                    <td class="py-3 px-4">{{ $permission->description ?? '-' }}</td>
+                    <td class="py-3 px-4 space-x-2">
+                        <a href="{{ route('admin.permissions.edit', $permission->id) }}" 
+                           class="inline-flex items-center px-2 py-1 bg-teal-500 hover:bg-teal-600 text-white rounded text-xs transition" 
+                           title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <form action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                class="inline-flex items-center px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs transition" 
+                                title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="4" class="py-6 text-center text-gray-500 dark:text-gray-400">No permissions found</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection

@@ -1,0 +1,130 @@
+@extends('layouts.admin')
+
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="container mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold">Dashboard</h1>
+        <button id="theme-toggle" class="flex items-center px-3 py-1.5 border border-gray-400 rounded text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition">
+            <i class="fas fa-moon mr-2"></i> Toggle Theme
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Users Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-5">
+            <h5 class="text-lg font-medium mb-2">Total Users</h5>
+            <h2 class="text-4xl font-bold mb-4">{{ $totalUsers }}</h2>
+            <a href="{{ route('admin.users.index') }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">View Users</a>
+        </div>
+
+        <!-- Total Roles Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-5">
+            <h5 class="text-lg font-medium mb-2">Total Roles</h5>
+            <h2 class="text-4xl font-bold mb-4">{{ $totalRoles }}</h2>
+            <a href="{{ route('admin.roles.index') }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">View Roles</a>
+        </div>
+
+        <!-- Total Permissions Card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-5">
+            <h5 class="text-lg font-medium mb-2">Total Permissions</h5>
+            <h2 class="text-4xl font-bold mb-4">{{ $totalPermissions }}</h2>
+            <a href="{{ route('admin.permissions.index') }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">View Permissions</a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Users -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+            <div class="border-b border-gray-200 dark:border-gray-700 px-5 py-3">
+                <h5 class="text-lg font-medium">Recent Registered Users</h5>
+            </div>
+            <div class="overflow-x-auto p-5">
+                <table class="min-w-full text-left text-sm text-gray-700 dark:text-gray-300">
+                    <thead>
+                        <tr class="border-b border-gray-200 dark:border-gray-700">
+                            <th class="py-2 px-4 font-semibold">Name</th>
+                            <th class="py-2 px-4 font-semibold">Email</th>
+                            <th class="py-2 px-4 font-semibold">Registered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentUsers as $user)
+                        <tr class="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="py-2 px-4">{{ $user->name }}</td>
+                            <td class="py-2 px-4">{{ $user->email }}</td>
+                            <td class="py-2 px-4">{{ $user->created_at->format('M d, Y') }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Role Distribution Chart -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-5">
+            <h5 class="text-lg font-medium mb-4">Role Distribution</h5>
+            <canvas id="roleChart" height="250"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('roleChart').getContext('2d');
+        const roleChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($roleDistribution->keys()),
+                datasets: [{
+                    label: 'Users per Role',
+                    data: @json($roleDistribution->values()),
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)', // Tailwind blue-500 with opacity
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        
+        // Check saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            toggleBtn.innerHTML = '<i class="fas fa-sun mr-2"></i> Light Mode';
+        } else {
+            document.documentElement.classList.remove('dark');
+            toggleBtn.innerHTML = '<i class="fas fa-moon mr-2"></i> Dark Mode';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '<i class="fas fa-moon mr-2"></i> Dark Mode';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '<i class="fas fa-sun mr-2"></i> Light Mode';
+            }
+        });
+    });
+</script>
+@endsection

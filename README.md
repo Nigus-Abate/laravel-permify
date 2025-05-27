@@ -42,11 +42,13 @@ composer require nigus-abate/laravel-permify
 ```bash
 // Generate basic scaffolding...
 php artisan permify bootstrap
+php artisan permify tailwind
 php artisan permify vue
 php artisan permify react
 
 // Generate login / registration scaffolding...
 php artisan permify bootstrap --auth
+php artisan permify tailwind --auth
 php artisan permify vue --auth
 php artisan permify react --auth
 ```
@@ -65,6 +67,20 @@ php artisan permify react --auth
 	$middleware->group('web',[
 		\App\Http\Middleware\RoleMiddleware::class,
 	]);
+
+### If you install Tailwind replace the resources/css/app.css with the below
+
+ ```bash
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional custom CSS */
+:root {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+```
 
 #### CSS
 

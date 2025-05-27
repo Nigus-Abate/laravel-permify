@@ -1,67 +1,74 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="flex justify-center">
-        <div class="w-full max-w-md">
-            <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                <div class="p-6 bg-gray-200 text-gray-700">{{ __('Register') }}</div>
+<div class="flex justify-center px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md">
+        <div class="bg-white shadow-md rounded-md overflow-hidden">
+            <div class="bg-gray-100 px-6 py-4 text-lg font-semibold text-gray-700">
+                {{ __('Register') }}
+            </div>
 
-                <div class="p-6">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
+            <div class="px-6 py-4">
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
 
-                        <div class="mb-3">
-                            <label for="name" class="block text-sm font-medium text-gray-600">{{ __('Name') }}</label>
+                    <!-- Name -->
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">
+                            {{ __('Name') }}
+                        </label>
+                        <input id="name" type="text"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('name') border-red-500 @enderror"
+                            name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        @error('name')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                            <div class="mt-1">
-                                <input id="name" type="text" class="form-input @error('name') border-red-500 @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                    <!-- Email -->
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">
+                            {{ __('Email Address') }}
+                        </label>
+                        <input id="email" type="email"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('email') border-red-500 @enderror"
+                            name="email" value="{{ old('email') }}" required autocomplete="email">
+                        @error('email')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                                @error('name')
-                                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
+                    <!-- Password -->
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-700">
+                            {{ __('Password') }}
+                        </label>
+                        <input id="password" type="password"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 @error('password') border-red-500 @enderror"
+                            name="password" required autocomplete="new-password">
+                        @error('password')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="email" class="block text-sm font-medium text-gray-600">{{ __('Email Address') }}</label>
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <label for="password-confirm" class="block text-sm font-medium text-gray-700">
+                            {{ __('Confirm Password') }}
+                        </label>
+                        <input id="password-confirm" type="password"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            name="password_confirmation" required autocomplete="new-password">
+                    </div>
 
-                            <div class="mt-1">
-                                <input id="email" type="email" class="form-input @error('email') border-red-500 @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="block text-sm font-medium text-gray-600">{{ __('Password') }}</label>
-
-                            <div class="mt-1">
-                                <input id="password" type="password" class="form-input @error('password') border-red-500 @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <p class="text-red-500 text-xs italic">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password-confirm" class="block text-sm font-medium text-gray-600">{{ __('Confirm Password') }}</label>
-
-                            <div class="mt-1">
-                                <input id="password-confirm" type="password" class="form-input" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between mt-4">
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">
-                                {{ __('Register') }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Submit Button -->
+                    <div class="flex items-center justify-between mt-6">
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {{ __('Register') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
