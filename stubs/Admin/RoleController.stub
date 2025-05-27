@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
-
+use App\Models\Permission;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 class RoleController extends Controller
 {
     /**
@@ -36,7 +38,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.roles.form');
+        $permissions = Permission::get();
+        return view('admin.roles.form', compact('permissions'));
     }
 
     /**
@@ -50,14 +53,60 @@ class RoleController extends Controller
         $request->validate([
             'name' => 'required|string|unique:roles,name',
             'description' => 'nullable|string|max:255',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,id', // Validate permission ids
         ]);
 
-        Role::create([
+         $role = Role::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
 
+         if ($request->has('permissions')) {
+            $role->permissions()->sync($request->permissions);
+        }
+
         return redirect()->route('admin.roles.index')
             ->with('success', 'Role created successfully.');
+    }
+
+    public function edit($id)
+    {
+        //abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $role = Role::findOrFail($id);
+        $permissions = Permission::get();
+        return view('admin.roles.form', compact('role', 'permissions'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,id', // Validate permission ids
+        ]);
+
+        $role = Role::findOrFail($id);
+        $role->update([
+            'name' => $request->name,
+        ]);
+
+        if ($request->has('permissions')) {
+            $role->permissions()->sync($request->permissions);
+        } else {
+            $role->permissions()->sync([]);
+        }
+
+        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
+    }
+
+    public function destroy(Role $role)
+    {
+        abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // Delete the role
+        $role->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'Role deleted successfully.');
     }
 }

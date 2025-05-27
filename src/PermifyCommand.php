@@ -70,7 +70,7 @@ class PermifyCommand extends Command
      */
     protected function tailwind()
     {
-        //Presets\Tailwind::essentialInstall();
+        Presets\Tailwind::essentialInstall();
         Presets\Tailwind::install();
 
         $this->components->info('Tailwind scaffolding installed successfully.');

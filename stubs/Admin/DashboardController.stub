@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Permission;
 use App\Models\User;
-
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 class DashboardController extends Controller
 {
     /**
@@ -22,6 +23,8 @@ class DashboardController extends Controller
     
     public function index()
     {
+        abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
         $totalUsers = User::count();
         $totalRoles = Role::count();
         $totalPermissions = Permission::count();

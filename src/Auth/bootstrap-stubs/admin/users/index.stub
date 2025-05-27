@@ -34,10 +34,10 @@
                             @endforeach
                         </td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-info">
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="#" method="POST" style="display: inline-block;">
+                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">

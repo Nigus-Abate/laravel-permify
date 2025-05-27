@@ -15,10 +15,12 @@ class Tailwind extends Preset
     {
         static::updatePackages();
         static::updateViteConfiguration();
+        static::addPostCssConfiguration();  // <--- ADD THIS
         static::updateSass();
         static::updateBootstrapping();
         static::removeNodeModules();
     }
+
 
     public static function essentialInstall()
     {
@@ -66,7 +68,7 @@ class Tailwind extends Preset
      */
     protected static function addPostCssConfiguration()
     {
-        copy(__DIR__.'/tailwind-stubs/postcss.config.js', base_path('postcss.config.js'));
+        copy(__DIR__.'/tailwind-stubs/postcss.config.js', base_path('postcss.config.cjs'));
     }
 
     /**

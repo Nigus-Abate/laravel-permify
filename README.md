@@ -47,10 +47,10 @@ php artisan permify vue
 php artisan permify react
 
 // Generate login / registration scaffolding...
-php artisan permify bootstrap --auth
-php artisan permify tailwind --auth
-php artisan permify vue --auth
-php artisan permify react --auth
+php artisan permify:auth bootstrap
+php artisan permify:auth tailwind
+php artisan permify:auth vue
+php artisan permify:auth react
 ```
 ### Usage
   Add the HasAdvancedRoles trait to your User model:

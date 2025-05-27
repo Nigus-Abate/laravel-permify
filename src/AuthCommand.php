@@ -14,8 +14,12 @@ class AuthCommand extends Command
      *
      * @var string
      */
+    // protected $signature = 'permify:auth
+    //                 { type=bootstrap : The preset type (bootstrap) }
+    //                 {--views : Only scaffold the authentication views}
+    //                 {--force : Overwrite existing views by default}';
     protected $signature = 'permify:auth
-                    { type=bootstrap : The preset type (bootstrap) }
+                    { type=bootstrap : The preset type (bootstrap, tailwind) }
                     {--views : Only scaffold the authentication views}
                     {--force : Overwrite existing views by default}';
 
@@ -65,7 +69,7 @@ class AuthCommand extends Command
             return call_user_func(static::$macros[$this->argument('type')], $this);
         }
 
-        if (! in_array($this->argument('type'), ['bootstrap'])) {
+        if (! in_array($this->argument('type'), ['bootstrap', 'tailwind'])) {
             throw new InvalidArgumentException('Invalid preset.');
         }
 

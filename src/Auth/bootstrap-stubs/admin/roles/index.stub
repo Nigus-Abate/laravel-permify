@@ -34,16 +34,19 @@
                             @endforeach
                         </td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-info">
+                            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="#" method="POST" style="display: inline-block;">
+
+                            @can('role_delete')
+                            <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
+                            @endcan
                         </td>
                     </tr>
                     @empty

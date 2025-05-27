@@ -1,128 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true', sidebarOpen: false }" 
+      :class="{ 'dark': darkMode }">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Panel - @yield('title')</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    transitionProperty: {
+                        'width': 'width'
+                    }
+                }
+            }
+        }
+    </script>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     @stack('styles')
-    
-    <style>
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-        }
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.75);
-        }
-        .sidebar .nav-link:hover {
-            color: rgba(255, 255, 255, 1);
-        }
-        .sidebar .nav-link.active {
-            color: white;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .main-content {
-            padding-top: 20px;
-        }
-    </style>
 </head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar p-0">
-                <div class="p-3 text-white">
-                    <h4>Admin Panel</h4>
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard.index') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div class="flex min-h-screen">
+        <!-- Mobile sidebar backdrop -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" 
+             class="fixed inset-0 z-20 bg-black/50 lg:hidden" x-transition></div>
+
+        <!-- Sidebar -->
+        <aside class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 dark:bg-gray-800 text-white transition-transform duration-300 ease-in-out transform"
+               :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }"
+               @click.away="sidebarOpen = false">
+            <div class="flex items-center justify-between p-4 border-b border-gray-700">
+                <h4 class="text-xl font-semibold">Admin Panel</h4>
+                <button @click="sidebarOpen = false" class="lg:hidden p-2 text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="p-4">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="{{ route('admin.dashboard.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
+                            {{ request()->is('admin/dashboard') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
+                            <i class="fas fa-tachometer-alt w-5 mr-3 text-center"></i>
+                            <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-                            <i class="fas fa-users me-2"></i> Users
+                    <li>
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
+                            {{ request()->is('admin/users*') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
+                            <i class="fas fa-users w-5 mr-3 text-center"></i>
+                            <span>Users</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/roles*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}">
-                            <i class="fas fa-user-tag me-2"></i> Roles
+                    <li>
+                        <a href="{{ route('admin.roles.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
+                            {{ request()->is('admin/roles*') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
+                            <i class="fas fa-user-tag w-5 mr-3 text-center"></i>
+                            <span>Roles</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/permissions*') ? 'active' : '' }}" href="{{ route('admin.permissions.index') }}">
-                            <i class="fas fa-key me-2"></i> Permissions
+                    <li>
+                        <a href="{{ route('admin.permissions.index') }}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors
+                            {{ request()->is('admin/permissions*') ? 'bg-gray-700' : 'hover:bg-gray-700' }}">
+                            <i class="fas fa-key w-5 mr-3 text-center"></i>
+                            <span>Permissions</span>
                         </a>
                     </li>
                 </ul>
-            </div>
-            
-            <!-- Main content -->
-            <div class="col-md-10 ms-sm-auto main-content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-                    <div class="container-fluid">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                            <span class="navbar-toggler-icon"></span>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 lg:ml-64">
+            <!-- Navbar -->
+            <header class="sticky top-0 z-10 bg-white dark:bg-gray-800 shadow-sm">
+                <div class="flex items-center justify-between p-4">
+                    <button @click="sidebarOpen = true" class="lg:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="flex items-center space-x-4">
+                        <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode)" 
+                                class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                            <i x-show="!darkMode" class="fas fa-moon"></i>
+                            <i x-show="darkMode" class="fas fa-sun"></i>
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                               <i class="fas fa-sign-out-alt me-2"></i> Logout
-                                            </a>
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                                @csrf
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                        
+                        <div x-data="{ dropdownOpen: false }" class="relative">
+                            <button @click="dropdownOpen = !dropdownOpen" 
+                                    class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                                <i class="fas fa-user-circle"></i>
+                                <span>{{ Auth::user()->name }}</span>
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" 
+                                   :class="{ 'transform rotate-180': dropdownOpen }"></i>
+                            </button>
+                            
+                            <div x-show="dropdownOpen" @click.away="dropdownOpen = false" 
+                                 x-transition:enter="transition ease-out duration-100" 
+                                 x-transition:enter-start="transform opacity-0 scale-95" 
+                                 x-transition:enter-end="transform opacity-100 scale-100" 
+                                 x-transition:leave="transition ease-in duration-75" 
+                                 x-transition:leave-start="transform opacity-100 scale-100" 
+                                 x-transition:leave-end="transform opacity-0 scale-95"
+                                 class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-20 border border-gray-200 dark:border-gray-600">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <i class="fas fa-user mr-2"></i> Profile
+                                </a>
+                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                                <a href="{{ route('logout') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600" 
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                    @csrf
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </nav>
-                
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="p-6">
+                <!-- Alerts -->
                 @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            {{ session('success') }}
+                        </div>
                     </div>
                 @endif
-                
+
                 @if($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <ul class="mb-0">
+                    <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            <span class="font-medium">There were some errors with your submission:</span>
+                        </div>
+                        <ul class="list-disc pl-5 space-y-1">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                
+
+                <!-- Page Content -->
                 @yield('content')
-            </div>
+            </main>
         </div>
     </div>
-    
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     @stack('scripts')
 </body>
 </html>
