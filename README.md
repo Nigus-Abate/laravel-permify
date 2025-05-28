@@ -19,7 +19,7 @@ While Laravel does not dictate which JavaScript or CSS pre-processors you use, i
 
 ### Supported Versions
 
-Only the latest major version of Laravel UI receives bug fixes. The table below lists compatible Laravel versions:
+Only the latest major version of Laravel Permify receives bug fixes. The table below lists compatible Laravel versions:
 
 | Version | Laravel Version |
 |---- |----|
@@ -189,32 +189,32 @@ If you prefer to use React to build your JavaScript application, Laravel makes i
 composer require nigus-abate/laravel-permify
 
 // Generate basic scaffolding...
-php artisan ui react
+php artisan permify react
 
 // Generate login / registration scaffolding...
-php artisan ui react --auth
+php artisan permify react --auth
 ````
 
 ### Adding Presets
 
-Presets are "macroable", which allows you to add additional methods to the `UiCommand` class at runtime. For example, the following code adds a `nextjs` method to the `UiCommand` class. Typically, you should declare preset macros in a [service provider](https://laravel.com/docs/providers):
+Presets are "macroable", which allows you to add additional methods to the `PermifyCommand` class at runtime. For example, the following code adds a `nextjs` method to the `PermifyCommand` class. Typically, you should declare preset macros in a [service provider](https://laravel.com/docs/providers):
 
 ```php
-use Laravel\Ui\UiCommand;
+use Permify\PermifyCommand;
 
-UiCommand::macro('nextjs', function (UiCommand $command) {
+PermifyCommand::macro('nextjs', function (PermifyCommand $command) {
     // Scaffold your frontend...
 });
 ```
-Then, you may call the new preset via the `ui` command:
+Then, you may call the new preset via the `permify` command:
 
 ```bash
-php artisan ui nextjs
+php artisan permify nextjs
 ```
 
 ## Contributing
 
-Thank you for considering contributing to UI!.
+Thank you for considering contributing to Permify UI!.
 
 ## Code of Conduct
 
@@ -226,4 +226,4 @@ Please review [our security policy](https://github.com/nigus-abate/laravel-permi
 
 ## License
 
-Laravel UI is open-sourced software licensed under the [MIT license](LICENSE.md).
+Laravel Permify is open-sourced software licensed under the [MIT license](LICENSE.md).
