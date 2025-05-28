@@ -3,6 +3,8 @@
 
 Advanced roles and permissions for Laravel.
 
+![dashbaord](https://github.com/user-attachments/assets/5f7c4465-36cd-4107-8fa2-3e60f71c509c)
+
 ## Key Features
 
 - ✅ User management
