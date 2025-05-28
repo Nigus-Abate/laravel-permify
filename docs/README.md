@@ -1,5 +1,5 @@
 
-# Laravel-Permify
+# 🛡️ Laravel-Permify
 
 Advanced roles and permissions for Laravel.
 
