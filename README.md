@@ -6,6 +6,8 @@
 
 
 **Laravel Permify** is a powerful, easy-to-use Laravel package for managing roles and permissions with full CRUD UI and middleware support.
+![dashbaord](https://github.com/user-attachments/assets/8560bcff-39cb-44bb-9935-55e67d591a2f)
+
 
 ## Introduction
 
