@@ -1,6 +1,7 @@
 # Installation Guide
 
 ### 1. Install the Package
+---
 
 ```bash
 composer require nigus-abate/laravel-permify
@@ -27,4 +28,35 @@ if ($user->hasPermission('edit_post')) {
     // show edit interface
 }
 ```
-👉 [Guide](guide.md)
+
+### 2. Guide
+
+---
+
+```md
+# Developer Guide
+
+## Blade Directives
+
+```blade
+@can('edit_post')
+    <button>Edit</button>
+@endcan
+```
+### 3. Example
+
+---
+
+```md
+# Usage Examples
+
+## Assign Role and Permission
+
+```php
+$user->assignRole('editor');
+$user->givePermissionTo('delete_post');
+
+@can('delete_post')
+    <button>Delete</button>
+@endcan
+---
