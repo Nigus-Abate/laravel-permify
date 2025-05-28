@@ -14,14 +14,4 @@ $user->givePermissionTo('delete_post');
 @can('delete_post')
     <button>Delete</button>
 @endcan
-
-
 ---
-
-### ✅ To Run the Docs Locally
-
-1. Install Docsify globally (once):
-```bash
-npm install -g docsify-cli
-
-docsify serve docs
