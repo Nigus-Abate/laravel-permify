@@ -1,5 +1,3 @@
-
-
 ---
 
 ## 📄 4. `docs/guide.md`
@@ -13,3 +11,5 @@
 @can('edit_post')
     <button>Edit</button>
 @endcan
+```
+👉 [Usage Example](examples.md)
