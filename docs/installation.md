@@ -26,3 +26,5 @@ $user->givePermissionTo('edit_post');
 if ($user->hasPermission('edit_post')) {
     // show edit interface
 }
+```
+👉 [Guide](guide.md)
